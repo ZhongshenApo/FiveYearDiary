@@ -1,0 +1,17 @@
+# 依赖项 (Dependencies)
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# 打包产物 (Build Outputs)
+dist/
+client/dist/
+
+# 私人日记数据 (Personal Diary Data - 绝对不能上传)
+data/*
+!data/.gitkeep
+
+# 系统与日志文件
+.DS_Store
+*.log
+.env
