@@ -1,6 +1,6 @@
 {
   "name": "five-year-diary",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A local-first 5-year diary desktop application",
   "main": "main.js",
   "scripts": {

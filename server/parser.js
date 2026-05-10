@@ -19,14 +19,16 @@ function parseMarkdownToJSON(markdownString, startYear) {
 
   // 2. 使用正则提取每个年份标题下的内容
   // 匹配 "## YYYY" 后面的所有内容，直到遇到下一个 "## " 或字符串结尾
-  const regex = /^##\s+(\d{4})\s*\n([\s\S]*?)(?=^##\s+|$)/gm;
+  const regex = /(?:^|\r?\n)##\s+(\d{4})[ \t]*\r?\n([\s\S]*?)(?=\r?\n##\s+|$)/g;
   let match;
 
   while ((match = regex.exec(markdownString)) !== null) {
     const currentYear = parseInt(match[1], 10);
     // 仅处理属于固定窗口期内的年份数据
     if (currentYear >= year && currentYear < year + 5) {
-      result[currentYear] = match[2].trim();
+      // 移除读取时的行尾空格（避免前端 textarea 出现多余的 Markdown 硬换行空格）
+      const rawContent = match[2].trim();
+      result[currentYear] = rawContent.split('\n').map(line => line.trimEnd()).join('\n');
     }
   }
 
@@ -50,8 +52,13 @@ function generateJSONToMarkdown(dateString, jsonObject, startYear) {
   // 2. 按顺序遍历并写入 5 个固定的年份
   for (let i = 0; i < 5; i++) {
     const currentYear = year + i;
-    const content = safeJsonObject[currentYear] ? safeJsonObject[currentYear].trim() : "";
-    
+    let content = safeJsonObject[currentYear] ? safeJsonObject[currentYear].trim() : "";
+
+    // 自动为每一行末尾添加两个空格，实现 Markdown 的硬换行 (Hard Line Break)
+    if (content) {
+      content = content.split('\n').map(line => line.trimEnd() + '  ').join('\n');
+    }
+
     markdown += `\n## ${currentYear}\n`;
     if (content) {
       markdown += `${content}\n`;

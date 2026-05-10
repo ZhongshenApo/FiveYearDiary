@@ -12,7 +12,7 @@ const IS_PACKAGED = process.env.NODE_ENV === 'production' || __dirname.includes(
 let DATA_DIR;
 if (IS_PACKAGED) {
   // 打包后：存放在用户电脑的 "文稿(Documents)/FiveYearDiary_Data" 文件夹中
-  // 这样既能让用户(包括您)在外面直观地看到和备份 md 文件，又不会因为硬编码路径导致别人的电脑报错
+  // 这样既能让用户在外面直观地看到和备份 md 文件，又避免了硬编码路径导致的隐私泄露和通用性问题
   DATA_DIR = path.join(os.homedir(), 'Documents', 'FiveYearDiary_Data');
 } else {
   // 开发时：存放在项目根目录的 data 文件夹
